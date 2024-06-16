@@ -39,6 +39,54 @@ class ProductCtr extends Controller
         return redirect()->back()->with('add','เพิ่มสินค้าเรียบร้อย');
     }
 
+    function addcarts(Request $request) {
+        $post = $request->all();
+        $product = Product::findOrFail($post['hd_id']);
+
+        $cart = session()->get('cart',[]);
+        if($product->stock < $post['qty']){
+            return redirect()->back()->with('addcartfail','สินค้าไม่เพียงพอ ลดจำนวนสินค้าเพื่อดำเนินการต่อ หรือติดต่อผู้ดูแล');
+        }
+
+        if(isset($cart[$post['hd_id']])){
+            $cart[$post['hd_id']]['qty'] += $post['qty'];
+
+            if($product->stock < $cart[$post['hd_id']]['qty'] += $post['qty']){
+                return redirect()->back()->with('addcartfail','สินค้าไม่เพียงพอ ลดจำนวนสินค้าเพื่อดำเนินการต่อ หรือติดต่อผู้ดูแล');
+            }
+        }else{
+            $cart[$post['hd_id']] = [
+                'product_id' => $post['hd_id'],
+                'product_name' => $product->name,
+                'price' => $product->price,
+                'qty' => $post['qty'],
+                'thumbnail' => $product->thumbnail
+            ];
+        }
+
+        session()->put('cart',$cart);
+        return redirect()->back()->with('addcart','เพิ่มสินค้าเรียบร้อย');
+    }
+
+    function updatecart(Request $request) {
+        $product = Product::findOrFail($request->id);
+
+
+        if($request->id && $request->qty){
+            $cart = session()->get('cart');
+            $cart[$request->id]['qty'] = $request->qty;
+
+            if($product->qty > $cart[$request->id]['qty']){
+                session()->put('cart', $cart);
+                session()->flash('success','เพิ่มรายการสิ้นค้าสำเร็จ');
+            }else{
+                session()->flash('addcartfail','สินค้าไม่เพียงพอ ลดจำนวนสินค้าเพื่อดำเนินการต่อ หรือติดต่อผู้ดูแล');
+            }
+
+            
+        }
+    }
+
     function cart() {
         // session()->invalidate();
         // session()->regenerateToken();
@@ -57,21 +105,16 @@ class ProductCtr extends Controller
         }
     }
 
-    function updatecart(Request $request) {
-        if($request->id && $request->qty){
-            $cart = session()->get('cart');
-            $cart[$request->id]['qty'] = $request->qty;
-            session()->put('cart', $cart);
-
-            session()->flash('success','เพิ่มรายการสิ้นค้าสำเร็จ');
-        }
-    }
-
     function checkout() {
-        return view('product-checkout');
+        if(session('cart')){
+            return view('product-checkout');
+        }
+        
+        return redirect()->route('home');
     }
 
     function comfirmcheckout(Request $request) {
+
         $data = $request->all();
         $request->validate(
             [

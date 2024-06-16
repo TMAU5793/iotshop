@@ -27,5 +27,13 @@
 
     {{-- Custom Script--}}
     @yield('script')
+
+    <script>
+        $(function(){
+            setTimeout(() => {
+                $('.alert-danger').hide();
+            }, 1500);
+        });
+    </script>
 </body>
 </html>

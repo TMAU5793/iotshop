@@ -5,6 +5,12 @@
     <div class="container">
         <div class="cart-page">
             <h5 class="text-center mb-5">รายการสินค้าในตะกร้า</h5>
+            <div class="onlynum"></div>
+            @if (session('addcartfail'))
+                <div class="alert alert-danger alert-dismissible text-center mt-5" role="alert">
+                    {{ session()->get('addcartfail') }}
+                </div>
+            @endif
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -30,13 +36,13 @@
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    {{ $detail['price'] }}
+                                    {{ number_format($detail['price']) }} ฿
                                 </td>
                                 <td class="text-center">
-                                    <input type="number" name="" value="{{ $detail['qty'] }}" class="form-control cart-update">
+                                    <input type="text" name="" value="{{ $detail['qty'] }}" data-qty="{{ $detail['qty'] }}" class="form-control cart-update text-center">
                                 </td>
                                 <td class="text-end">
-                                    {{ $detail['price'] * $detail['qty'] }}
+                                    {{ number_format($detail['price'] * $detail['qty']) }} ฿
                                 </td>
                                 <td class="action text-center">
                                     <button class="btn btn-danger btn-sm cart_remove">
@@ -50,13 +56,20 @@
                     
                 </tbody>
                 <tfoot>
-                    <tr class="text-end">
-                        <td colspan="6"><strong><h4>{{ $total }} บาท</h4></strong></td>
+                    <tr>
+                        @if(count((array) session('cart')))
+                            <td colspan="6" class="text-end"><strong><h4>{{ number_format($total) }} ฿</h4></strong></td>
+                        @else
+                            <td colspan="6" class="text-center"><div class="p-3 text-danger">ยังไม่ได้เลือกสินค้า</div></td>
+                        @endif
+
                     </tr>
                     <tr>
                         <td colspan="6" class="text-end">
                             <a href="{{ route('home') }}" class="btn btn-danger">ดูสินค้าเพิ่มเติม</a>
-                            <a href="{{ route('cart.checkout') }}" class="btn btn-success">ดำเนินการชำระเงิน</a>
+                            @if(count((array) session('cart')))
+                                <a href="{{ route('cart.checkout') }}" class="btn btn-success">ดำเนินการชำระเงิน</a>
+                            @endif
                         </td>
                     </tr>
                 </tfoot>
@@ -90,19 +103,29 @@
             $('.cart-update').on('change',function(){
                 let ele = $(this);
                 let val = $(this).val();
-                // console.log(val);
-                $.ajax({
-                    url: '{{ route("update.cart") }}',
-                    method: 'PUT',
-                    data : {
-                        _token: '{{ csrf_token() }}',
-                        id: ele.parents("tr").attr('data-id'),
-                        qty: val
-                    },
-                    success: function(res){
-                        window.location.reload();
-                    }
-                });
+                let oldval = $(this).attr('data-qty');
+                console.log(oldval);
+                if($.isNumeric(val)){
+                    $.ajax({
+                        url: '{{ route("update.cart") }}',
+                        method: 'PUT',
+                        data : {
+                            _token: '{{ csrf_token() }}',
+                            id: ele.parents("tr").attr('data-id'),
+                            qty: val
+                        },
+                        success: function(res){
+                            window.location.reload();
+                        }
+                    });
+                }else{
+                    ele.val(oldval)
+                    $('.onlynum').html('<small class="alert alert-danger alert-dismissible text-center d-block">* เฉพาะตัวเลขเท่านั้น</small>');
+
+                    setTimeout(() => {
+                        $('.onlynum').html('');
+                    }, 1500);
+                }
             });
         });
     </script>

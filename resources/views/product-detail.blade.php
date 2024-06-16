@@ -14,18 +14,36 @@
                 <div class="col-md-6">
                     <div class="small mb-1">{{ $product->code }}</div>
                     <h1 class="display-5 fw-bolder">{{ $product->name }}</h1>
-                    <div class="fs-5 mb-5">
+                    <div class="fs-5">
                         {{-- <span class="text-decoration-line-through">$45.00</span> --}}
-                        <span>{{ $product->price }} บาท</span>
+                        <span>{{ number_format($product->price) }} ฿</span>
                     </div>
-                    <p class="lead">{!! $product->description !!}</p>
-                    <div class="d-flex">
-                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                            <i class="bi-cart-fill me-1"></i>
-                            เพิ่มตะกร้า
-                        </button>
-                    </div>
+                    <small class="d-block">จำนวน <strong>{{ $product->stock }}</strong> ชิ้น</small>
+                    <p class="lead mt-5">{!! $product->description !!}</p>
+                    
+                    @if($product->stock)
+                        <form id="frm-qty" action="{{ route('product.addcars') }}" method="POST">
+                            @csrf
+                            <input type="submit" hidden />
+                            <input type="hidden" name="hd_id" value="{{ $product->id }}">
+                            <div class="d-flex">
+                                <input class="form-control text-center me-3" id="inputQty" name="qty" type="text" value="1" style="max-width: 3rem" onchange="checkedNum(this)"/>
+                                <button id="btn-addcart" class="btn btn-outline-dark flex-shrink-0" type="button">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    เพิ่มตะกร้า
+                                </button>
+                            </div>
+                        </form>
+                    @else
+                        <button class="btn btn-danger">สินค้าหมดชั่วคราว</button>
+                    @endif
+                    <div class="onlynum"></div>
+
+                    @if (session('addcartfail'))
+                        <div class="alert alert-danger alert-dismissible text-center mt-5" role="alert">
+                            {{ session()->get('addcartfail') }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -48,7 +66,7 @@
                                     <!-- Product name-->
                                     <h5 class="fw-bolder">{{ $relate->name }}</h5>
                                     <!-- Product price-->
-                                    <span>{{ $relate->price }} บาท</span>
+                                    <span>{{ number_format($relate->price) }} ฿</span>
                                 </div>
                             </div>
                             <!-- Product actions-->
@@ -63,4 +81,27 @@
         </div>
     </section>
 
+@endsection
+
+@section('script')
+    <script>
+        function checkedNum (input){
+            let val = input.value;
+            if(!$.isNumeric(val)){
+                input.value = 1;
+                $('.onlynum').html('<small class="text-danger">* เฉพาะตัวเลขเท่านั้น</small>');
+
+                setTimeout(() => {
+                    $('.onlynum').html('');
+                }, 1500);
+            }
+        }
+
+        $('#btn-addcart').on('click',function(){
+            let qty = $('#inputQty').val();
+            if($.isNumeric(qty)){
+                $('#frm-qty').submit();
+            }
+        });
+    </script>
 @endsection

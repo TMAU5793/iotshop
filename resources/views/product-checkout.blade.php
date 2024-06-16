@@ -89,7 +89,7 @@
 
                                             <div class="col-6">
                                                 <div class="text-end">
-                                                    {{ $detail['price'] * $detail['qty'] }} บาท
+                                                    {{ number_format($detail['price'] * $detail['qty'],2) }} ฿
                                                 </div>
                                             </div>
                                         </div>
@@ -103,7 +103,7 @@
 
                                     <div class="col-6">
                                         <div class="text-end">
-                                            <h5><strong>{{ $total }} บาท</strong></h5>
+                                            <h5><strong>{{ number_format($total,2) }} ฿</strong></h5>
                                         </div>
                                     </div>
                                 </div>

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeCtr::class, 'index'])->name('home');
 Route::get('/product/{slug}', [ProductCtr::class, 'detail'])->name('product.detail');
+Route::post('/addcarts', [ProductCtr::class, 'addcarts'])->name('product.addcars');
 Route::get('/addcart/{id}', [ProductCtr::class, 'addcart'])->name('product.addcart');
 Route::get('/cart', [ProductCtr::class, 'cart'])->name('product.cart');
 Route::delete('/removecart', [ProductCtr::class, 'removecart'])->name('remove.cart');

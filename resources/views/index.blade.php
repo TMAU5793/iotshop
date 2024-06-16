@@ -42,7 +42,7 @@
                                     <!-- Product name-->
                                     <h5 class="fw-bolder">{{ $product->name }}</h5>
                                     <!-- Product price-->
-                                    <span>{{ $product->price }} บาท</span>
+                                    <span>{{ number_format($product->price) }} ฿</span>
                                 </div>
                             </div>
                             <!-- Product actions-->
