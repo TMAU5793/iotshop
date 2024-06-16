@@ -1,0 +1,19 @@
+.bread-crumbs{
+    a{
+        text-decoration: none;
+        color: #000;
+        &:hover{
+            font-weight: 700;
+            text-decoration: underline;
+        }
+    }
+}
+
+.cart-page{
+    margin-top: 6rem;
+    .cart-img{
+        img{
+            max-width: 100px;
+        }
+    }
+}

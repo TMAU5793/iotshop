@@ -1,0 +1,159 @@
+.login-page .card {
+  max-width: 350px;
+  width: 100%;
+}
+
+html, body {
+  font-family: "KanitRegular";
+}
+
+.login-page .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 360px;
+  width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.tbl-action::after {
+  content: "";
+  float: none;
+  clear: both;
+}
+.tbl-action .action-item {
+  float: left;
+}
+
+.thumbnail img {
+  max-width: 150px;
+  width: 100%;
+}
+
+.input-file-hidden input {
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+}
+
+.cb-switch input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+.cb-switch label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 70px;
+  height: 35px;
+  background: grey;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+.cb-switch label:after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 35px;
+  height: 25px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+.cb-switch input:checked + label {
+  background: #28a745;
+}
+.cb-switch input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+.cb-switch label:active:after {
+  width: 100px;
+}
+.cb-switch body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-control::placeholder {
+  color: #c5c5c5;
+}
+
+.text-gray {
+  color: #c5c5c5;
+}
+
+.badge {
+  color: #fff;
+  width: 50px;
+}
+
+.sidebar.toggled .btn-logout span {
+  display: none;
+}
+
+.badge {
+  width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.a-btn:hover {
+  color: #fff;
+}
+
+#studentModal .modal-content {
+  height: 90vh;
+}
+#studentModal .modal-body {
+  overflow-y: scroll;
+}
+
+.cb-switch.cb-switch-cus label {
+  width: 50px;
+  height: 25px;
+}
+.cb-switch.cb-switch-cus label::after {
+  width: 20px;
+  height: 16px;
+}
+
+.info-personal {
+  padding: 0.25rem 0;
+}
+
+.btn-filter {
+  border: 1px solid #858796;
+}
+.btn-filter:hover {
+  background-color: #858796;
+  color: #fff;
+}
+
+.btn-export {
+  border: 1px solid #4e73df;
+  color: #4e73df;
+}
+.btn-export:hover {
+  background-color: #4e73df;
+  color: #fff;
+}
+
+#filterModal .close {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  opacity: 1;
+}
+#filterModal .close i {
+  font-size: 2.5rem;
+}
+
+/*# sourceMappingURL=adminStyle.css.map */
